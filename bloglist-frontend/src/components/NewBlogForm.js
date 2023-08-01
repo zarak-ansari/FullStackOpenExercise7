@@ -1,21 +1,21 @@
-import { useState } from "react";
+import { useState } from 'react'
 
 const NewBlogForm = (props) => {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   const createNewBlog = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     try {
-      props.addNewBlog({ title, author, url });
-      setTitle("");
-      setAuthor("");
-      setUrl("");
+      props.addNewBlog({ title, author, url })
+      setTitle('')
+      setAuthor('')
+      setUrl('')
     } catch (exception) {
-      console.log(exception);
+      console.log(exception)
     }
-  };
+  }
 
   return (
     <div>
@@ -47,7 +47,7 @@ const NewBlogForm = (props) => {
         <button>Submit</button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default NewBlogForm;
+export default NewBlogForm

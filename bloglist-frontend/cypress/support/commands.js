@@ -24,27 +24,27 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-Cypress.Commands.add("login", (user) => {
-  cy.request("POST", `${Cypress.env("BACKEND")}/login`, {
+Cypress.Commands.add('login', (user) => {
+  cy.request('POST', `${Cypress.env('BACKEND')}/login`, {
     username: user.username,
     password: user.password,
   }).then(({ body }) => {
-    localStorage.setItem("user", JSON.stringify(body));
-    cy.visit("");
-  });
-});
+    localStorage.setItem('user', JSON.stringify(body))
+    cy.visit('')
+  })
+})
 
-Cypress.Commands.add("createUser", (user) => {
-  cy.request("POST", `${Cypress.env("BACKEND")}/users`, user);
-});
+Cypress.Commands.add('createUser', (user) => {
+  cy.request('POST', `${Cypress.env('BACKEND')}/users`, user)
+})
 
-Cypress.Commands.add("createBlog", (blog) => {
+Cypress.Commands.add('createBlog', (blog) => {
   cy.request({
-    url: `${Cypress.env("BACKEND")}/blogs`,
-    method: "POST",
+    url: `${Cypress.env('BACKEND')}/blogs`,
+    method: 'POST',
     headers: {
-      Authorization: `Bearer ${JSON.parse(localStorage.getItem("user")).token}`,
+      Authorization: `Bearer ${JSON.parse(localStorage.getItem('user')).token}`,
     },
     body: blog,
-  });
-});
+  })
+})

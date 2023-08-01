@@ -1,25 +1,25 @@
-import { useState } from "react";
-import loginService from "../services/login";
-import blogService from "../services/blogs";
-import PropTypes from "prop-types";
+import { useState } from 'react'
+import loginService from '../services/login'
+import blogService from '../services/blogs'
+import PropTypes from 'prop-types'
 
 const LoginForm = (props) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const handleLogin = async (event) => {
-    event.preventDefault();
+    event.preventDefault()
     try {
-      const user = await loginService.login({ username, password });
-      props.setUser(user);
-      setUsername("");
-      setPassword("");
-      blogService.setToken(user.token);
-      window.localStorage.setItem("user", JSON.stringify(user));
-      props.displayNotification("Successfully logged in", "green");
+      const user = await loginService.login({ username, password })
+      props.setUser(user)
+      setUsername('')
+      setPassword('')
+      blogService.setToken(user.token)
+      window.localStorage.setItem('user', JSON.stringify(user))
+      props.displayNotification('Successfully logged in', 'green')
     } catch (exception) {
-      props.displayNotification("Login Failed", "red");
+      props.displayNotification('Login Failed', 'red')
     }
-  };
+  }
 
   return (
     <div>
@@ -45,12 +45,12 @@ const LoginForm = (props) => {
         </button>
       </form>
     </div>
-  );
-};
+  )
+}
 
 LoginForm.propTypes = {
   setUser: PropTypes.func.isRequired,
   displayNotification: PropTypes.func.isRequired,
-};
+}
 
-export default LoginForm;
+export default LoginForm
