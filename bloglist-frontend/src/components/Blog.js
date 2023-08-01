@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
+import { displayNotification } from '../reducers/notificationReducer'
 
 const blogStyle = {
   paddingTop: 10,
@@ -10,6 +12,8 @@ const blogStyle = {
 }
 
 const Blog = (props) => {
+
+  const dispatch = useDispatch()
   const blog = props.blog
   const [detailsVisible, setDetailsVisible] = useState(false)
 
@@ -20,6 +24,7 @@ const Blog = (props) => {
     updatedBlog.user = blog.user.id
     updatedBlog.likes = blog.likes + 1
     delete updatedBlog.id
+    dispatch(displayNotification(`liked blog ${blog.title}`,5))
     props.incrementLikesOfBlog(blog.id, updatedBlog)
   }
 

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { displayNotification } from './reducers/notificationReducer'
 
 import blogService from './services/blogs'
 
@@ -7,14 +8,15 @@ import LoginForm from './components/LoginForm'
 import NewBlogForm from './components/NewBlogForm'
 import Toggleable from './components/Toggelable'
 import Notification from './components/Notification'
+import { useDispatch } from 'react-redux'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [notificationMessage, setNotificationMessage] = useState(null)
-  const [notificationColor, setNotificationColor] = useState(null)
 
   const newBlogFormVisibilityRef = useRef()
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const loggedInUser = window.localStorage.getItem('user')
@@ -38,26 +40,16 @@ const App = () => {
     setUser(null)
   }
 
-  const displayNotification = (message, color) => {
-    setNotificationMessage(message)
-    setNotificationColor(color)
-    setTimeout(() => {
-      setNotificationMessage(null)
-      setNotificationColor(null)
-    }, 5000)
-  }
-
   const addNewBlog = async (newBlog) => {
     try {
       newBlogFormVisibilityRef.current.toggleVisibility()
       const responseBlog = await blogService.createNewBlog(newBlog)
       setBlogs(blogs.concat(responseBlog))
-      displayNotification(
-        `Added new blog ${responseBlog.title} by ${responseBlog.author}`,
-        'green'
-      )
+      dispatch(displayNotification(
+        `Added new blog ${responseBlog.title} by ${responseBlog.author}`, 5
+      ))
     } catch (exception) {
-      displayNotification('Could not add new blog', 'red')
+      dispatch(displayNotification('Could not add new blog',5))
       console.log(exception)
     }
   }
@@ -86,7 +78,7 @@ const App = () => {
     return (
       <div>
         <h2>blogs</h2>
-        <Notification message={notificationMessage} color={notificationColor} />
+        <Notification />
         <p>
           Logged in user: {user.name}
           <button onClick={logout}>Log Out</button>
@@ -115,10 +107,9 @@ const App = () => {
     return (
       <div>
         <h2>Log in</h2>
-        <Notification message={notificationMessage} color={notificationColor} />
+        <Notification />
         <LoginForm
           setUser={setUser}
-          displayNotification={displayNotification}
         />
       </div>
     )
