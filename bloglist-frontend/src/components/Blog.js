@@ -24,6 +24,8 @@ const Blog = (props) => {
     updatedBlog.user = blog.user.id
     updatedBlog.likes = blog.likes + 1
     delete updatedBlog.id
+    // send to backend for put request
+    // update in reducer
     dispatch(displayNotification(`liked blog ${blog.title}`,5))
     props.incrementLikesOfBlog(blog.id, updatedBlog)
   }
