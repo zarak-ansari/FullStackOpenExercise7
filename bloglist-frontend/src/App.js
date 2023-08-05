@@ -1,22 +1,14 @@
-import { useState, useEffect, useRef } from 'react'
-import { displayNotification } from './reducers/notificationReducer'
+import { useState, useEffect } from 'react'
 
 import blogService from './services/blogs'
-
 import LoginForm from './components/LoginForm'
-import NewBlogForm from './components/NewBlogForm'
-import Toggleable from './components/Toggelable'
 import Notification from './components/Notification'
-import { useDispatch } from 'react-redux'
 import BlogList from './components/BlogList'
+import NewBlogForm from './components/NewBlogForm'
 
 const App = () => {
 
   const [user, setUser] = useState(null)
-
-  const newBlogFormVisibilityRef = useRef()
-
-  const dispatch = useDispatch()
 
   useEffect(() => {
     const loggedInUser = window.localStorage.getItem('user')
@@ -34,21 +26,6 @@ const App = () => {
     setUser(null)
   }
 
-  const addNewBlog = async (newBlog) => {
-    try {
-      newBlogFormVisibilityRef.current.toggleVisibility()
-      const responseBlog = await blogService.createNewBlog(newBlog)
-      // setBlogs(blogs.concat(responseBlog))
-      dispatch(displayNotification(
-        `Added new blog ${responseBlog.title} by ${responseBlog.author}`, 5
-      ))
-    } catch (exception) {
-      dispatch(displayNotification('Could not add new blog', 5))
-      console.log(exception)
-    }
-  }
-
-
   if (user) {
     return (
       <div>
@@ -58,11 +35,7 @@ const App = () => {
           Logged in user: {user.name}
           <button onClick={logout}>Log Out</button>
         </p>
-        <h2>Create a new Blog</h2>
-        <Toggleable buttonLabel="New Blog" ref={newBlogFormVisibilityRef}>
-          <NewBlogForm addNewBlog={addNewBlog} />
-        </Toggleable>
-
+        <NewBlogForm />
         <BlogList />
       </div>
     )
