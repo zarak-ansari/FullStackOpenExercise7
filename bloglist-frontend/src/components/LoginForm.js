@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
-import PropTypes from 'prop-types'
 import { displayNotification } from '../reducers/notificationReducer'
 import { useDispatch } from 'react-redux'
+import { setUser } from '../reducers/userReducer'
 
-const LoginForm = (props) => {
+const LoginForm = () => {
 
   const dispatch = useDispatch()
 
@@ -15,7 +15,7 @@ const LoginForm = (props) => {
     event.preventDefault()
     try {
       const user = await loginService.login({ username, password })
-      props.setUser(user)
+      dispatch(setUser(user))
       setUsername('')
       setPassword('')
       blogService.setToken(user.token)
@@ -53,8 +53,6 @@ const LoginForm = (props) => {
   )
 }
 
-LoginForm.propTypes = {
-  setUser: PropTypes.func.isRequired,
-}
+
 
 export default LoginForm

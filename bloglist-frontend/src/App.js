@@ -1,20 +1,23 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 
 import blogService from './services/blogs'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
 import BlogList from './components/BlogList'
 import NewBlogForm from './components/NewBlogForm'
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser } from './reducers/userReducer'
 
 const App = () => {
 
-  const [user, setUser] = useState(null)
+  const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
 
   useEffect(() => {
     const loggedInUser = window.localStorage.getItem('user')
     if (loggedInUser) { // doesn't check validity of the user at all
       const parsedUser = JSON.parse(loggedInUser)
-      setUser(parsedUser)
+      dispatch(setUser(parsedUser))
       blogService.setToken(parsedUser.token)
     }
   }, [])
@@ -23,7 +26,7 @@ const App = () => {
   const logout = () => {
     blogService.setToken(null)
     window.localStorage.removeItem('user')
-    setUser(null)
+    dispatch(setUser(null))
   }
 
   if (user) {
@@ -36,7 +39,7 @@ const App = () => {
           <button onClick={logout}>Log Out</button>
         </p>
         <NewBlogForm />
-        <BlogList loggedInUsername={user.username}/>
+        <BlogList />
       </div>
     )
   } else {
@@ -44,9 +47,7 @@ const App = () => {
       <div>
         <h2>Log in</h2>
         <Notification />
-        <LoginForm
-          setUser={setUser}
-        />
+        <LoginForm />
       </div>
     )
   }

@@ -31,11 +31,12 @@ const Blog = (props) => {
     dispatch(incrementLikesOfBlog(blog.id))
   }
 
-  const removeBlogButtonHandler = async () => {
+  const removeBlogButtonHandler = () => {
     try {
-      await blogService.removeBlog(blog.id)
+      blogService.removeBlog(blog.id)
       dispatch(removeBlog(blog.id))
       dispatch(displayNotification('Deleted blog successfully', 5))
+      console.log('hi')
     } catch (error) {
       console.log(error)
       dispatch(displayNotification('Something went wrong', 5))
