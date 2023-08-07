@@ -2,6 +2,8 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import { displayNotification } from '../reducers/notificationReducer'
+import { incrementLikesOfBlog, removeBlog } from '../reducers/blogReducer'
+import blogService from '../services/blogs'
 
 const blogStyle = {
   paddingTop: 10,
@@ -19,20 +21,25 @@ const Blog = (props) => {
 
   const toggleVisibility = () => setDetailsVisible(!detailsVisible)
 
-  const incrementLikes = () => {
+  const incrementLikes = async () => {
     const updatedBlog = { ...blog }
     updatedBlog.user = blog.user.id
     updatedBlog.likes = blog.likes + 1
     delete updatedBlog.id
-    // send to backend for put request
-    // update in reducer
+    await blogService.updateBlog(updatedBlog, blog.id)
     dispatch(displayNotification(`liked blog ${blog.title}`,5))
-    props.incrementLikesOfBlog(blog.id, updatedBlog)
+    dispatch(incrementLikesOfBlog(blog.id))
   }
 
-  const removeBlog = (event) => {
-    event.preventDefault()
-    props.removeBlog(blog.id)
+  const removeBlogButtonHandler = async () => {
+    try {
+      await blogService.removeBlog(blog.id)
+      dispatch(removeBlog(blog.id))
+      dispatch(displayNotification('Deleted blog successfully', 5))
+    } catch (error) {
+      console.log(error)
+      dispatch(displayNotification('Something went wrong', 5))
+    }
   }
 
   return (
@@ -54,7 +61,7 @@ const Blog = (props) => {
           </p>
           <p className="blogUsername">{blog.user.name}</p>
           {blog.user.username === props.loggedInUsername && (
-            <button className="removeBlogButton" onClick={removeBlog}>
+            <button className="removeBlogButton" onClick={removeBlogButtonHandler}>
               Remove
             </button>
           )}

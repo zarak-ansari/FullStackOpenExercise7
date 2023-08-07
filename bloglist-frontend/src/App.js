@@ -12,7 +12,7 @@ const App = () => {
 
   useEffect(() => {
     const loggedInUser = window.localStorage.getItem('user')
-    if (loggedInUser) {
+    if (loggedInUser) { // doesn't check validity of the user at all
       const parsedUser = JSON.parse(loggedInUser)
       setUser(parsedUser)
       blogService.setToken(parsedUser.token)
@@ -36,7 +36,7 @@ const App = () => {
           <button onClick={logout}>Log Out</button>
         </p>
         <NewBlogForm />
-        <BlogList />
+        <BlogList loggedInUsername={user.username}/>
       </div>
     )
   } else {
