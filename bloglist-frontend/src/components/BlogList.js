@@ -8,7 +8,7 @@ const BlogList = () => {
   const dispatch = useDispatch()
 
   const blogs = useSelector(state => state.blogs)
-  const sortedBlogs = blogs.slice().sort((a,b) => (a.likes < b.likes))
+  const sortedBlogs = blogs.slice().sort((a, b) => (a.likes < b.likes))
 
   useEffect(() => {
     blogService.getAll().then((blogsFromBackend) => {
@@ -16,11 +16,13 @@ const BlogList = () => {
     })
   }, [])
 
-  if(blogs){
-    return(
-      <div id='blogList'>
-        {sortedBlogs.map(blog => (<Blog key={blog.id} blog={blog} />))}
-      </div>)
+  if (blogs) {
+    return (
+      <>
+        <h2>Blogs</h2>
+        <div id='blogList'>
+          {sortedBlogs.map(blog => (<Blog key={blog.id} blog={blog} />))}
+        </div></>)
   } else {
     return null
   }
