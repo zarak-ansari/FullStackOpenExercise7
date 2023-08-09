@@ -7,11 +7,14 @@ import BlogList from './components/BlogList'
 import NewBlogForm from './components/NewBlogForm'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from './reducers/userReducer'
+import { useNotificationDispatch } from './notificationContext'
 
 const App = () => {
 
   const dispatch = useDispatch()
   const user = useSelector(state => state.user)
+
+  const notificationDispatch = useNotificationDispatch()
 
   useEffect(() => {
     const loggedInUser = window.localStorage.getItem('user')
@@ -22,6 +25,10 @@ const App = () => {
     }
   }, [])
 
+  const displayNotification = (notificationText, timeInSeconds) => {
+    notificationDispatch({ type:'SHOW', payload:notificationText })
+    setTimeout(() => notificationDispatch({ type:'HIDE' }), timeInSeconds * 1000)
+  }
 
   const logout = () => {
     blogService.setToken(null)
@@ -38,8 +45,8 @@ const App = () => {
           Logged in user: {user.name}
           <button onClick={logout}>Log Out</button>
         </p>
-        <NewBlogForm />
-        <BlogList />
+        <NewBlogForm displayNotification={displayNotification} />
+        <BlogList displayNotification={displayNotification} />
       </div>
     )
   } else {
@@ -47,7 +54,7 @@ const App = () => {
       <div>
         <h2>Log in</h2>
         <Notification />
-        <LoginForm />
+        <LoginForm displayNotification={displayNotification} />
       </div>
     )
   }

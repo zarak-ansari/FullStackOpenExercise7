@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
-import { displayNotification } from '../reducers/notificationReducer'
 import { incrementLikesOfBlog, removeBlog } from '../reducers/blogReducer'
 import blogService from '../services/blogs'
 
@@ -21,13 +20,15 @@ const Blog = (props) => {
 
   const toggleVisibility = () => setDetailsVisible(!detailsVisible)
 
+
+
   const incrementLikes = async () => {
     const updatedBlog = { ...blog }
     updatedBlog.user = blog.user.id
     updatedBlog.likes = blog.likes + 1
     delete updatedBlog.id
     await blogService.updateBlog(updatedBlog, blog.id)
-    dispatch(displayNotification(`liked blog ${blog.title}`,5))
+    props.displayNotification(`liked blog ${blog.title}`,5)
     dispatch(incrementLikesOfBlog(blog.id))
   }
 
@@ -35,11 +36,10 @@ const Blog = (props) => {
     try {
       blogService.removeBlog(blog.id)
       dispatch(removeBlog(blog.id))
-      dispatch(displayNotification('Deleted blog successfully', 5))
-      console.log('hi')
+      props.displayNotification('Deleted blog successfully', 5)
     } catch (error) {
       console.log(error)
-      dispatch(displayNotification('Something went wrong', 5))
+      props.displayNotification('Something went wrong', 5)
     }
   }
 

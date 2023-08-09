@@ -2,10 +2,9 @@ import { useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import blogService from '../services/blogs'
 import { appendBlog } from '../reducers/blogReducer'
-import { displayNotification } from '../reducers/notificationReducer'
 import Toggleable from './Toggelable'
 
-const NewBlogForm = () => {
+const NewBlogForm = (props) => {
   const dispatch = useDispatch()
   const newBlogFormVisibilityRef = useRef()
 
@@ -18,15 +17,15 @@ const NewBlogForm = () => {
     try {
       const responseBlog = await blogService.createNewBlog({ title, author, url })
       dispatch(appendBlog(responseBlog))
-      dispatch(displayNotification(
+      props.displayNotification(
         `Added new blog ${responseBlog.title} by ${responseBlog.author}`, 5
-      ))
+      )
       newBlogFormVisibilityRef.current.toggleVisibility()
       setTitle('')
       setAuthor('')
       setUrl('')
     } catch (exception) {
-      dispatch(displayNotification('Could not add new blog', 5))
+      props.displayNotification('Could not add new blog', 5)
       console.log(exception)
     }
   }
