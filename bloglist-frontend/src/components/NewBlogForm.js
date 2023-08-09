@@ -1,11 +1,19 @@
 import { useState, useRef } from 'react'
-import { useDispatch } from 'react-redux'
 import blogService from '../services/blogs'
-import { appendBlog } from '../reducers/blogReducer'
 import Toggleable from './Toggelable'
+import { useMutation, useQueryClient } from 'react-query'
 
 const NewBlogForm = (props) => {
-  const dispatch = useDispatch()
+
+  const queryClient = useQueryClient()
+
+  const newBlogMutation = useMutation(blogService.createNewBlog, {
+    onSuccess: (newBlog) => {
+      const blogs = queryClient.getQueryData('blogs')
+      queryClient.setQueryData('blogs', blogs.concat(newBlog))
+    }
+  })
+
   const newBlogFormVisibilityRef = useRef()
 
   const [title, setTitle] = useState('')
@@ -15,11 +23,8 @@ const NewBlogForm = (props) => {
   const createNewBlog = async (event) => {
     event.preventDefault()
     try {
-      const responseBlog = await blogService.createNewBlog({ title, author, url })
-      dispatch(appendBlog(responseBlog))
-      props.displayNotification(
-        `Added new blog ${responseBlog.title} by ${responseBlog.author}`, 5
-      )
+      newBlogMutation.mutate({ title, author, url })
+      props.displayNotification(`Added new blog ${title} by ${author}`, 5)
       newBlogFormVisibilityRef.current.toggleVisibility()
       setTitle('')
       setAuthor('')

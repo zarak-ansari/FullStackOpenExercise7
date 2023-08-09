@@ -1,20 +1,25 @@
-import { useSelector, useDispatch } from 'react-redux'
-import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import Blog from './Blog'
 import blogService from '../services/blogs'
-import { setBlogs } from '../reducers/blogReducer'
+import { useQuery } from 'react-query'
 
 const BlogList = (props) => {
-  const dispatch = useDispatch()
-  const user = useSelector(state => state.user)
-  const blogs = useSelector(state => state.blogs)
-  const sortedBlogs = blogs.slice().sort((a, b) => (a.likes < b.likes))
 
-  useEffect(() => {
-    blogService.getAll().then((blogsFromBackend) => {
-      dispatch(setBlogs(blogsFromBackend))
-    })
-  }, [])
+  const blogsQuery = useQuery('blogs', blogService.getAll)
+  const user = useSelector(state => state.user)
+
+  if(blogsQuery.status === 'loading') {
+    return (
+      <div id='blogList'>Blogs still loading</div>
+    )
+  }
+
+  if(blogsQuery.status === 'error'){
+    <div id='blogList'>An error occurred</div>
+  }
+
+  const blogs = blogsQuery.data
+  const sortedBlogs = blogs.slice().sort((a, b) => (a.likes < b.likes))
 
   if (blogs) {
     return (
@@ -22,7 +27,8 @@ const BlogList = (props) => {
         <h2>Blogs</h2>
         <div id='blogList'>
           {sortedBlogs.map(blog => (<Blog key={blog.id} blog={blog} loggedInUsername={user.username} displayNotification={props.displayNotification}/>))}
-        </div></>)
+        </div>
+      </>)
   } else {
     return null
   }
