@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
-import { useDispatch } from 'react-redux'
-import { setUser } from '../reducers/userReducer'
+import { useUserDispatch } from '../userContext'
 
 const LoginForm = (props) => {
 
-  const dispatch = useDispatch()
+  const dispatch = useUserDispatch()
 
   const displayNotification = props.displayNotification
   const [username, setUsername] = useState('')
@@ -15,7 +14,7 @@ const LoginForm = (props) => {
     event.preventDefault()
     try {
       const user = await loginService.login({ username, password })
-      dispatch(setUser(user))
+      dispatch({ type:'SET_USER', payload:user })
       setUsername('')
       setPassword('')
       blogService.setToken(user.token)

@@ -1,12 +1,12 @@
-import { useSelector } from 'react-redux'
 import Blog from './Blog'
 import blogService from '../services/blogs'
 import { useQuery } from 'react-query'
+import { useUserValue } from '../userContext'
 
 const BlogList = (props) => {
 
   const blogsQuery = useQuery('blogs', blogService.getAll)
-  const user = useSelector(state => state.user)
+  const user = useUserValue()
 
   if(blogsQuery.status === 'loading') {
     return (
