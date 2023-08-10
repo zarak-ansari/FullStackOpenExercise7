@@ -13,7 +13,10 @@ const createNewBlog = async (newBlog) => {
   return response.data
 }
 
-const updateBlog = async (updatedBlog, blogId) => {
+const updateBlog = async (updatedBlog) => {
+  const blogId = updatedBlog.id
+  const blogToBeSentToBackend = { ...updatedBlog }
+  delete blogToBeSentToBackend.id
   const config = { headers: { Authorization: token } }
   const response = await axios.put(`${baseUrl}/${blogId}`, updatedBlog, config)
   return response.data

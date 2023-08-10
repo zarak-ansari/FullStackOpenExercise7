@@ -1,8 +1,6 @@
 import { useState } from 'react'
-import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
-import { incrementLikesOfBlog, removeBlog } from '../reducers/blogReducer'
 import blogService from '../services/blogs'
+import { useMutation, useQueryClient } from 'react-query'
 
 const blogStyle = {
   paddingTop: 10,
@@ -14,28 +12,34 @@ const blogStyle = {
 
 const Blog = (props) => {
 
-  const dispatch = useDispatch()
+  const queryClient = useQueryClient()
   const blog = props.blog
   const [detailsVisible, setDetailsVisible] = useState(false)
 
+  const updateBlogMutation = useMutation(blogService.updateBlog, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries('blogs')
+    }
+  })
+
+  const removeBlogMutation = useMutation(blogService.removeBlog, {
+    onSuccess: async () => {
+      await queryClient.invalidateQueries('blogs')
+    }
+  })
   const toggleVisibility = () => setDetailsVisible(!detailsVisible)
 
-
-
-  const incrementLikes = async () => {
+  const incrementLikes = () => {
     const updatedBlog = { ...blog }
     updatedBlog.user = blog.user.id
     updatedBlog.likes = blog.likes + 1
-    delete updatedBlog.id
-    await blogService.updateBlog(updatedBlog, blog.id)
+    updateBlogMutation.mutate(updatedBlog)
     props.displayNotification(`liked blog ${blog.title}`,5)
-    dispatch(incrementLikesOfBlog(blog.id))
   }
 
   const removeBlogButtonHandler = () => {
     try {
-      blogService.removeBlog(blog.id)
-      dispatch(removeBlog(blog.id))
+      removeBlogMutation.mutate(blog.id)
       props.displayNotification('Deleted blog successfully', 5)
     } catch (error) {
       console.log(error)
@@ -72,12 +76,5 @@ const Blog = (props) => {
   )
 }
 
-Blog.prototypes = {
-  key: PropTypes.string.isRequired,
-  blog: PropTypes.object.isRequired,
-  incrementLikesOfBlog: PropTypes.func.isRequired,
-  loggedInUsername: PropTypes.string.isRequired,
-  removeBlog: PropTypes.func.isRequired,
-}
 
 export default Blog
