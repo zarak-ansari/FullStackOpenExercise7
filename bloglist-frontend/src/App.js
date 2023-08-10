@@ -7,6 +7,7 @@ import BlogList from './components/BlogList'
 import NewBlogForm from './components/NewBlogForm'
 import { useNotificationDispatch } from './notificationContext'
 import { useUserDispatch, useUserValue } from './userContext'
+import UsersPage from './components/UsersPage'
 
 const App = () => {
 
@@ -45,6 +46,8 @@ const App = () => {
         </p>
         <NewBlogForm displayNotification={displayNotification} />
         <BlogList displayNotification={displayNotification} />
+
+        <UsersPage />
       </div>
     )
   } else {
