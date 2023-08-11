@@ -1,20 +1,19 @@
 import { useEffect } from 'react'
+import { Route, Routes, Navigate } from 'react-router-dom'
 
-import blogService from './services/blogs'
-import LoginForm from './components/LoginForm'
-import Notification from './components/Notification'
-import BlogList from './components/BlogList'
-import NewBlogForm from './components/NewBlogForm'
-import { useNotificationDispatch } from './notificationContext'
 import { useUserDispatch, useUserValue } from './userContext'
-import UsersPage from './components/UsersPage'
+import { useNotificationDispatch } from './notificationContext'
+import blogService from './services/blogs'
+
+import Notification from './components/Notification'
+
+import HomePage from './pages/HomePage'
+import UsersPage from './pages/UsersPage'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
 
-  const user = useUserValue()
   const userDispatch = useUserDispatch()
-  const notificationDispatch = useNotificationDispatch()
-
   useEffect(() => {
     const loggedInUser = window.localStorage.getItem('user')
     if (loggedInUser) { // doesn't check validity of the user at all
@@ -23,6 +22,8 @@ const App = () => {
       blogService.setToken(parsedUser.token)
     }
   }, [])
+
+  const notificationDispatch = useNotificationDispatch()
 
   const displayNotification = (notificationText, timeInSeconds) => {
     notificationDispatch({ type:'SHOW', payload:notificationText })
@@ -35,30 +36,29 @@ const App = () => {
     userDispatch({ type:'LOGOUT' })
   }
 
-  if (user) {
-    return (
-      <div>
-        <h2>blogs</h2>
-        <Notification />
-        <p>
-          Logged in user: {user.name}
-          <button onClick={logout}>Log Out</button>
-        </p>
-        <NewBlogForm displayNotification={displayNotification} />
-        <BlogList displayNotification={displayNotification} />
+  const user = useUserValue()
 
-        <UsersPage />
-      </div>
-    )
-  } else {
-    return (
-      <div>
-        <h2>Log in</h2>
-        <Notification />
-        <LoginForm displayNotification={displayNotification} />
-      </div>
-    )
-  }
+  return(
+    <>
+      <h2>Blogs</h2>
+      <Notification />
+      {user && <p>{user.name} logged in <button onClick={logout}>Log Out</button></p>}
+      <Routes>
+        <Route
+          path='/login'
+          element={<LoginForm />}
+        />
+        <Route
+          path='/users'
+          element={user ? <UsersPage /> : <Navigate replace to='/login' />}
+        />
+        <Route
+          path='/'
+          element={<HomePage displayNotification={displayNotification}/>}
+        />
+      </Routes>
+    </>
+  )
+
 }
-
 export default App

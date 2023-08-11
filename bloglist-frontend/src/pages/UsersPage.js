@@ -9,12 +9,18 @@ const UsersPage = () => {
   if(usersQuery.status === 'success') {
     return(
       <div>
+        <h2>Blogs</h2>
+
         <table>
-          <tr>
-            <th>User Name</th>
-            <th>Blogs Created</th>
-          </tr>
-          {users.map(user => <tr key={user.id}><td>{user.name}</td><td>{user.blogs.length}</td></tr>)}
+          <thead>
+            <tr>
+              <th>User Name</th>
+              <th>Blogs Created</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map(user => <tr key={user.id}><td>{user.name}</td><td>{user.blogs.length}</td></tr>)}
+          </tbody>
         </table>
       </div>
     )
