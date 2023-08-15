@@ -7,6 +7,7 @@ const BlogList = (props) => {
 
   const blogsQuery = useQuery('blogs', blogService.getAll)
   const user = useUserValue()
+  const username = user ? user.username : ''
 
   if(blogsQuery.status === 'loading') {
     return (
@@ -26,7 +27,7 @@ const BlogList = (props) => {
       <>
         <h2>Blogs</h2>
         <div id='blogList'>
-          {sortedBlogs.map(blog => (<Blog key={blog.id} blog={blog} loggedInUsername={user.username} displayNotification={props.displayNotification}/>))}
+          {sortedBlogs.map(blog => (<Blog key={blog.id} blog={blog} loggedInUsername={username} displayNotification={props.displayNotification}/>))}
         </div>
       </>)
   } else {

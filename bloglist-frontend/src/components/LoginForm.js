@@ -2,12 +2,14 @@ import { useState } from 'react'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 import { useUserDispatch } from '../userContext'
+import { useNavigate } from 'react-router'
 
 const LoginForm = (props) => {
 
   const dispatch = useUserDispatch()
-
+  const navigate = useNavigate()
   const displayNotification = props.displayNotification
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const handleLogin = async (event) => {
@@ -20,6 +22,7 @@ const LoginForm = (props) => {
       blogService.setToken(user.token)
       window.localStorage.setItem('user', JSON.stringify(user))
       displayNotification('Successfully logged in', 3)
+      navigate('/')
     } catch (exception) {
       displayNotification('Login Failed', 3)
     }
