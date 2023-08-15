@@ -19,7 +19,7 @@ const UsersPage = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map(user => <tr key={user.id}><td><a href={`/users/${user.id}`}>{user.name}</a> - {user.id}</td><td>{user.blogs.length}</td></tr>)}
+            {users.map(user => <tr key={user.id}><td><a href={`/users/${user.id}`}>{user.name}</a></td><td>{user.blogs.length}</td></tr>)}
           </tbody>
         </table>
       </div>

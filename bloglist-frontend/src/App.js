@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Route, Routes, Navigate } from 'react-router-dom'
+import { Route, Routes, Navigate, Link } from 'react-router-dom'
 
 import { useUserDispatch, useUserValue } from './userContext'
 import { useNotificationDispatch } from './notificationContext'
@@ -12,6 +12,8 @@ import UsersPage from './pages/UsersPage'
 import LoginForm from './components/LoginForm'
 import UserDetailPage from './pages/UserDetailPage'
 import BlogDetailPage from './pages/BlogDetailPage'
+
+const paddingStyle = { padding: 5 }
 
 const App = () => {
 
@@ -42,9 +44,13 @@ const App = () => {
 
   return(
     <>
-      <h2>Blogs</h2>
+      <div style={{ backgroundColor:'grey', padding:10 }}>
+        <Link style={paddingStyle} to='/'>blogs</Link>
+        <Link style={paddingStyle} to='/users'>users</Link>
+        {user ? <span>{user.name} logged in <button onClick={logout}>Log Out</button></span> : <Link style={paddingStyle} to='/login'>Log In</Link>}
+      </div>
+      <h2>Blogs App</h2>
       <Notification />
-      {user && <p>{user.name} logged in <button onClick={logout}>Log Out</button></p>}
       <Routes>
         <Route
           path='/login'
