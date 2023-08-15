@@ -11,6 +11,7 @@ import HomePage from './pages/HomePage'
 import UsersPage from './pages/UsersPage'
 import LoginForm from './components/LoginForm'
 import UserDetailPage from './pages/UserDetailPage'
+import BlogDetailPage from './pages/BlogDetailPage'
 
 const App = () => {
 
@@ -19,7 +20,7 @@ const App = () => {
     const loggedInUser = window.localStorage.getItem('user')
     if (loggedInUser) { // doesn't check validity of the user at all
       const parsedUser = JSON.parse(loggedInUser)
-      userDispatch({ type:'SET vb   _USER', payload:parsedUser })
+      userDispatch({ type:'SET_USER', payload:parsedUser })
       blogService.setToken(parsedUser.token)
     }
   }, [])
@@ -47,7 +48,7 @@ const App = () => {
       <Routes>
         <Route
           path='/login'
-          element={<LoginForm displayNotification={displayNotification} />}
+          element={user ? <Navigate replace to='/' /> : <LoginForm displayNotification={displayNotification} />}
         />
         <Route
           path='/users'
@@ -56,6 +57,10 @@ const App = () => {
         <Route
           path='/users/:id'
           element={<UserDetailPage />}
+        />
+        <Route
+          path='/blogs/:id'
+          element={<BlogDetailPage displayNotification={displayNotification} />}
         />
         <Route
           path='/'
