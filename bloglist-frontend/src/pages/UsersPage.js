@@ -1,5 +1,6 @@
 import { useQuery } from 'react-query'
 import { getAll } from '../services/users'
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 
 const UsersPage = () => {
   const usersQuery = useQuery('users', getAll)
@@ -9,19 +10,18 @@ const UsersPage = () => {
   if(usersQuery.status === 'success') {
     return(
       <div>
-        <h2>Blogs</h2>
 
-        <table>
-          <thead>
-            <tr>
-              <th>User Name</th>
-              <th>Blogs Created</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map(user => <tr key={user.id}><td><a href={`/users/${user.id}`}>{user.name}</a></td><td>{user.blogs.length}</td></tr>)}
-          </tbody>
-        </table>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>User Name</TableCell>
+              <TableCell>Blogs Created</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.map(user => <TableRow key={user.id}><TableCell><a href={`/users/${user.id}`}>{user.name}</a></TableCell><TableCell>{user.blogs.length}</TableCell></TableRow>)}
+          </TableBody>
+        </Table>
       </div>
     )
   }

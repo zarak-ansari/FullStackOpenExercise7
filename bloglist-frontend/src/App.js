@@ -13,6 +13,8 @@ import LoginForm from './components/LoginForm'
 import UserDetailPage from './pages/UserDetailPage'
 import BlogDetailPage from './pages/BlogDetailPage'
 
+import { AppBar, Container, Toolbar, Typography, Button, Box } from '@mui/material'
+
 const paddingStyle = { padding: 5 }
 
 const App = () => {
@@ -43,13 +45,28 @@ const App = () => {
   const user = useUserValue()
 
   return(
-    <>
-      <div style={{ backgroundColor:'grey', padding:10 }}>
-        <Link style={paddingStyle} to='/'>blogs</Link>
-        <Link style={paddingStyle} to='/users'>users</Link>
-        {user ? <span>{user.name} logged in <button onClick={logout}>Log Out</button></span> : <Link style={paddingStyle} to='/login'>Log In</Link>}
-      </div>
-      <h2>Blogs App</h2>
+    <Container>
+      <AppBar position='static' component='nav'>
+        <Toolbar>
+          <Box sx={{ flexGrow: 1 }}>
+            <Button variant='text'>
+              <Link style={paddingStyle} to='/'>blogs</Link>
+            </Button>
+            <Button variant='text'>
+              <Link style={paddingStyle} to='/users'>users</Link>
+            </Button>
+          </Box>
+          <Box>
+            {user
+              ?
+              <Typography>{user.name} logged in <Button variant='contained' onClick={logout}>Log Out</Button></Typography>
+              :
+              <Button><Link style={paddingStyle} to='/login'>Log In</Link></Button>
+            }
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <Typography variant='h5'>Blogs App</Typography>
       <Notification />
       <Routes>
         <Route
@@ -73,7 +90,7 @@ const App = () => {
           element={user ? <HomePage displayNotification={displayNotification} /> : <Navigate replace to='/login' />}
         />
       </Routes>
-    </>
+    </Container>
   )
 
 }

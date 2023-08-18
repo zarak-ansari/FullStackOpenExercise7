@@ -2,6 +2,7 @@ import { useState, useRef } from 'react'
 import blogService from '../services/blogs'
 import Toggleable from './Toggelable'
 import { useMutation, useQueryClient } from 'react-query'
+import { Button, TextField, Typography } from '@mui/material'
 
 const NewBlogForm = (props) => {
 
@@ -37,34 +38,34 @@ const NewBlogForm = (props) => {
 
   return (
     <div>
-      <h2>Create a new Blog</h2>
+      <Typography variant='h6'>Create a new Blog</Typography>
       <Toggleable buttonLabel="New Blog" ref={newBlogFormVisibilityRef}>
         <form onSubmit={createNewBlog}>
-          <label htmlFor="title">Title</label>
-          <input
+          <TextField
             id="title"
             name="title"
+            label="title"
             type="text"
             value={title}
             onChange={({ target }) => setTitle(target.value)}
           />
-          <label htmlFor="author">Author</label>
-          <input
+          <TextField
             id="author"
             name="author"
+            label="author"
             type="text"
             value={author}
             onChange={({ target }) => setAuthor(target.value)}
           />
-          <label htmlFor="url">URL</label>
-          <input
+          <TextField
             id="url"
             name="url"
+            label="url"
             type="text"
             value={url}
             onChange={({ target }) => setUrl(target.value)}
           />
-          <button>Submit</button>
+          <Button>Submit</Button>
         </form>
       </Toggleable>
     </div>

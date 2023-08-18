@@ -2,6 +2,7 @@ import Blog from './Blog'
 import blogService from '../services/blogs'
 import { useQuery } from 'react-query'
 import { useUserValue } from '../userContext'
+import { Table, TableContainer, TableBody, Typography } from '@mui/material'
 
 const BlogList = (props) => {
 
@@ -25,11 +26,16 @@ const BlogList = (props) => {
   if (blogs) {
     return (
       <>
-        <h2>Blogs</h2>
-        <div id='blogList'>
-          {sortedBlogs.map(blog => (<Blog key={blog.id} blog={blog} loggedInUsername={username} displayNotification={props.displayNotification}/>))}
-        </div>
-      </>)
+        <Typography variant='h6'>Blogs</Typography>
+        <TableContainer>
+          <Table>
+            <TableBody id='blogList'>
+              {sortedBlogs.map(blog => (<Blog key={blog.id} blog={blog} loggedInUsername={username} displayNotification={props.displayNotification}/>))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </>
+    )
   } else {
     return null
   }

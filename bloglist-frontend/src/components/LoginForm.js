@@ -3,6 +3,11 @@ import loginService from '../services/login'
 import blogService from '../services/blogs'
 import { useUserDispatch } from '../userContext'
 import { useNavigate } from 'react-router'
+import { Box, Button, Input, Typography } from '@mui/material'
+
+const textFieldStyle = {
+  margin:5
+}
 
 const LoginForm = (props) => {
 
@@ -29,29 +34,31 @@ const LoginForm = (props) => {
   }
 
   return (
-    <div>
+    <Box>
+      <Typography variant='h6'>Log In</Typography>
       <form id="loginForm" onSubmit={handleLogin}>
-        <label htmlFor="username">Username</label>
-        <input
+        <Input
+          style={textFieldStyle}
           id="username"
-          type="text"
+          placeholder="username"
           value={username}
           onChange={({ target }) => setUsername(target.value)}
         />
         <br />
-        <label htmlFor="password">Password</label>
-        <input
+        <Input
+          style={textFieldStyle}
           id="password"
+          placeholder="password"
           type="password"
           value={password}
           onChange={({ target }) => setPassword(target.value)}
         />
         <br />
-        <button id="loginSubmit" type="submit">
+        <Button id="loginSubmit" type="submit" variant='contained'>
           Login
-        </button>
+        </Button>
       </form>
-    </div>
+    </Box>
   )
 }
 

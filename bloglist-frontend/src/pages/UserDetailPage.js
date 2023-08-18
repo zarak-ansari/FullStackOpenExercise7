@@ -1,6 +1,7 @@
 import { useParams } from 'react-router'
 import { useQuery } from 'react-query'
 import { getAll } from '../services/users'
+import { Box, List, ListItem, Typography } from '@mui/material'
 
 
 const UserDetailPage = () => {
@@ -13,13 +14,13 @@ const UserDetailPage = () => {
   const users = usersQuery.data
   const user = users.find(user => user.id === id)
   return(
-    <div>
-      <h2>{user.name}</h2>
-      <h3>Added Blogs:</h3>
-      <ul>
-        {user.blogs.map(blog => (<li key={blog.id}>{blog.title}</li>))}
-      </ul>
-    </div>
+    <Box>
+      <Typography variant='h5'>{user.name}</Typography>
+      <Typography variant='h6'>Added Blogs:</Typography>
+      <List>
+        {user.blogs.map(blog => (<ListItem key={blog.id}>{blog.title}</ListItem>))}
+      </List>
+    </Box>
   )
 }
 

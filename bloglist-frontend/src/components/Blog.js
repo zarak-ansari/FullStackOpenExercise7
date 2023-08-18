@@ -1,21 +1,17 @@
-const blogStyle = {
-  paddingTop: 10,
-  paddingLeft: 2,
-  border: 'solid',
-  borderWidth: 1,
-  marginBottom: 5,
-}
+import { Link, TableCell, TableRow } from '@mui/material'
 
-const Blog = (props) => {
+const Blog = ({ blog }) => {
 
-  const blog = props.blog
 
   return (
-    <div className="blog" id={blog.id} style={blogStyle}>
-      <p className="blogTitleAndAuthor">
-        <a href={`/blogs/${blog.id}`}>{blog.title} - {blog.author}{' '}</a>
-      </p>
-    </div>
+    <TableRow className="blog" id={blog.id}>
+      <TableCell className="blogTitleAndAuthor">
+        <Link href={`/blogs/${blog.id}`}>{blog.title}</Link>
+      </TableCell>
+      <TableCell>
+        {blog.author}
+      </TableCell>
+    </TableRow>
   )
 }
 

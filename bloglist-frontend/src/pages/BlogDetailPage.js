@@ -5,6 +5,7 @@ import { useMutation, useQueryClient } from 'react-query'
 
 import blogService from '../services/blogs'
 import { useUserValue } from '../userContext'
+import { Link, Typography, Button, TextField, List, ListItem, Box } from '@mui/material'
 
 const BlogDetailPage = (props) => {
   const id = useParams().id
@@ -63,37 +64,37 @@ const BlogDetailPage = (props) => {
 
     updateBlogMutation.mutate(newBlog)
     setCommentText('')
-    props.displayNotification('Added comment to the blog successfully')
+    props.displayNotification('Added comment to the blog successfully', 5)
   }
 
   return(
-    <div>
-      <h2>{blog.title} - {blog.author}</h2>
-      <p><a href={blog.url}>{blog.url}</a></p>
-      <p>{blog.likes} like(s) <button onClick={incrementLikes}>Like</button></p>
-      <p>added by {blog.user.name}</p>
+    <Box>
+      <Typography variant='h6'>{blog.title} - {blog.author}</Typography>
+      <Typography><Link href={blog.url}>{blog.url}</Link></Typography>
+      <Typography>{blog.likes} like(s) <Button onClick={incrementLikes}>Like</Button></Typography>
+      <Typography>added by {blog.user.name}</Typography>
       {blog.user.username === user.username && (
-        <button className="removeBlogButton" onClick={removeBlogButtonHandler}>
+        <Button className="removeBlogButton" onClick={removeBlogButtonHandler}>
             Remove
-        </button>
+        </Button>
       )}
-      <h3>Comments:</h3>
+      <Typography variant='h6'>Comments:</Typography>
       <form onSubmit={addComment}>
-        <input
+        <TextField
           type='text'
           name='commentText'
           id='commentText'
+          label='Comment'
           value={commentText}
           onChange={e => setCommentText(e.target.value)}
         />
-        <button type='submit'>Submit</button>
+        <Button type='submit'>Submit</Button>
       </form>
-      <ul>
-        {blog.comments.map(comment => <li key={comment}>{comment}</li>)}
-        {/* TODO: incorporate IDs somehow. This will blow up if two comments have the same text */ }
-      </ul>
+      <List>
+        {blog.comments.map(comment => <ListItem key={comment}>{comment}</ListItem>)}
+      </List>
 
-    </div>
+    </Box>
   )
 }
 
